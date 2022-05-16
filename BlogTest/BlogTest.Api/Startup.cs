@@ -1,14 +1,19 @@
+using BlogTest.Api.Validators;
+using BlogTest.Data;
+using BlogTest.Data.Interfaces;
+using BlogTest.Data.Repositories;
+using BlogTest.Service.Dtos;
+using BlogTest.Service.Interfaces;
+using BlogTest.Service.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlogTest.Api
 {
@@ -24,7 +29,12 @@ namespace BlogTest.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddDbContext<BlogDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection")));
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient(typeof(IBlogService), typeof(BlogService));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddControllers().AddFluentValidation();
+            services.AddTransient<IValidator<BlogDto>, BlogRequestDtoValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
