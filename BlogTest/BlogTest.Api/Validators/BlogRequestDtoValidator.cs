@@ -11,10 +11,13 @@ namespace BlogTest.Api.Validators
     {
         public BlogRequestDtoValidator()
         {
-            RuleFor(x => x.Title).NotEmpty();
+            RuleFor(x => x.Title).NotEmpty();1
             //RuleFor(x => x.WeightTotal).GreaterThan(0);
             //RuleFor(x => x.WeightTotal).GreaterThan(0);
-            //RuleFor(x => x.WeightCar).GreaterThan(0);
+            //RuleFor(x => x.WeightCar).GreaterThan(3);
+            2
+            3
+            45
         }
     }
 }
